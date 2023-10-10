@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Crud</title>
+    <style>
+        body{
+            background-color: white;
+           /* background-image: linear-gradient(110deg,#4eab4e,#765ab9);*/
+            /*display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;*/
+            /*height: 100vh; 
+            padding: 150px;*/
+            width: 98%;     
+        }
+        .Dashboard{
+            background-color: black;
+            width: 100%;
+            height: 70px;
+            /*display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;*/
+            line-height: 35px;
+            border-radius: 5px;
+            /*gap: 15px;*/
+            margin-top: -35px;
+        }
+        h2{
+            color: white;
+            font-size: 30px;
+            align-items: center;
+            justify-content: center;
+            line-height: 60px;
+            margin-left: 15px;
+        }
+        .AddDeleteButtons{
+            display: flex;
+        }
+        .AddANewStudent{
+            background-color: black;
+            width: 150px;
+            height: 35px;
+            color: white;
+            font-size: 13px;
+            margin-top: 20px;
+            margin-left: 10px;
+            cursor: pointer;
+        }  
+        .DeleteAllTables{
+            background-color: black;
+            width: 135px;
+            height: 35px;
+            color: white;
+            font-size: 13px;
+            cursor: pointer;
+            margin-left: 30px;
+            margin-top: 20px; 
+        
+        }
+        /*.Tableform th, .Tableform td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        .Tableform th {
+            background-color: #f2f2f2;
+        }*/
+        .Tableform{
+            display: table;
+            /*border-collapse: separate;*/
+            /*box-sizing: border-box;
+            text-indent: initial;
+            border-spacing: 2px;
+            border-color: gray;*/ 
+            text-align: center;
+            padding-left: 13px;
+            margin: 10px;
+            padding: 1em;
+        }
+        .Tableform,.Tableform th,.Tableform td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            height: 40px;
+            /*width: 1500px;*/
+            /*margin-left: 12px;
+            margin-top: 11px;
+            text-align: center;*/
+            
+        }
+        table{
+            width: 100%;
+            border: 1px solid black;
+            border-collapse: collapse;
+            height: 40px;
+            
+        }
+        .Popup{
+            visibility: hidden;
+            height: 60%;
+            width: 30%;
+            background-color: #dddd;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50% , -50%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 5px 5px 10px lightgrey;
+            line-height: 60px;
+        }
+        .button{
+            width: 290px;
+            height: 35px;
+            background-color: blue;
+            color: white;
+            cursor: pointer;
+        }
+        .name{        
+            width: 290px;
+            height: 35px; 
+            line-height: 35px;           
+        }
+        .rollnumber{
+            width: 290px;
+            height: 35px; 
+        }
+        .subject{
+            width: 290px;
+            height: 35px; 
+        }
+        .marks{
+            width: 290px;
+            height: 35px; 
+        }
+        #popupcloseicon{
+            cursor: pointer;
+            position: absolute;
+            left: 93%;
+            bottom: 90%;
+            color: red;
+        }
+        .UpdateStudentDetails{
+            background-color: black;
+            width: 145px;
+            height: 35px;
+            color: white;
+            font-size: 13px;
+            margin-top: -50px;
+            margin-left: 90px;
+            cursor: pointer;
+        }
+        .updatebutton{
+            width: 290px;
+            height: 35px;
+            background-color: blue;
+            color: white;
+            cursor: pointer;
+        }
+        .Updatename{        
+            width: 290px;
+            height: 35px; 
+            line-height: 35px;           
+        }
+        .Updaterollnumber{
+            width: 290px;
+            height: 35px; 
+        }
+        .Updatesubject{
+            width: 290px;
+            height: 35px; 
+        }
+        .Updatemarks{
+            width: 290px;
+            height: 35px; 
+        }
+        #popupcloseicon{
+            cursor: pointer;
+            position: absolute;
+            left: 93%;
+            bottom: 90%;
+            color: red;
+        }
+        #popupcloseicons{
+            cursor: pointer;
+            position: absolute;
+            left: 93%;
+            bottom: 90%;
+            color: red;
+        }
+        #ErrorMsg{
+            display: none;
+            font-size: smaller;
+            text-align: center;
+            margin-top: -15px;
+            color: red;
+        }
+        #ErrorMsgs{
+            display: none;
+            font-size: smaller;
+            text-align: center;
+            margin-top: -15px;
+            color: red;
+        }
+    </style>
+</head>
+<div class="Popup" id="popup">
+    <div>
+        <h3>Add New Student <i class="fa fa-times" id="popupcloseicon" style="align-items: end;"></i></h3>
+    </div>
+    <div>
+        <input type="text" placeholder="name" class = "name" id="Name"/>
+    </div>
+    <div>
+        <input type="number" placeholder="Roll Number" class = "rollnumber" id="RollNumber"/>
+    </div>
+    <div>
+        <input type="text"  placeholder="Subject" class = "subject" id="Subject"/>
+    </div>
+    <div>
+        <input type="number" placeholder="Marks"class = "marks" id="Marks"/>
+    </div>
+    <div>
+        <input type="button" value="Save" class="button" id="BTN"/>
+    </div>
+    <p id="ErrorMsg">Fill the Details</p>
+</div>
+<div class="Popup" id="editpopup">
+    <div>
+        <h3>Update Student Details<i class="fa fa-times" id="popupcloseicons" style="align-items: end;"></i></h3>
+    </div>
+    <div>
+        <input type="text" placeholder="update Name" class = "Updatename" id="UpdateName"/>
+    </div>
+    <div>
+        <input type="number" placeholder="update Roll Number" class = "Updaterollnumber" id="UpdateRollNumber"/>
+    </div>
+    <div>
+        <input type="text"  placeholder="update Subject" class = "Updatesubject" id="UpdateSubject"/>
+    </div>
+    <div>
+        <input type="number" placeholder="update Marks"class = "Updatemarks" id="UpdateMarks"/>
+    </div>
+    <div>
+        <input type="button" value="Update" class="updatebutton" id="UpdateBTN" />
+    </div>
+    <p id="ErrorMsgs">Fill the Update Details</p>
+</div>
+<body>
+    <div>
+        <div class="Dashboard">
+            <h2>Dashboard</h2>
+        </div>
+        <div class="AddDeleteButtons">
+            <button class="AddANewStudent" id="addanewstudent">Add A New Student</button>
+            <button class="DeleteAllTables" id="deletealltables">Delete All</button>
+        </div>
+        <div>
+            <table class="Tableform">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Student Name</th> 
+                        <th>Student Roll</th>
+                        <th>Subject</th>
+                        <th>Marks</th>
+                        <th>Edit</th>
+                        <th>Delete</th>                        
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>    
+            </table>
+        </div>
+    </div>
+    <script>
+        // var addButton = document.getElementById("addanewrow");
+        // addButton.addEventListener('click', addRow);
+        // function addRow(){
+        //     var tablebody = document.getElementById("tableBody")
+        //     var newRow = tablebody.insertRow(tableBody.rows.length);
+        //     //console.log(newRow)
+        //     var cell1 = newRow.insertCell(0);
+        //     var cell2 = newRow.insertCell(1);
+        //     var cell3 = newRow.insertCell(2);
+        //     var cell4 = newRow.insertCell(3);
+        //     var cell5 = newRow.insertCell(4);
+        //     //var cell6 = newRow.insertCell(5);
+        //     //var cell7 = newRow.insertCell(6);
+
+        //     cell1.innerHTML = "<input type='text'>";
+        //     cell2.innerHTML = "<input type='text'>";
+        //     cell3.innerHTML = "<input type='text'>";
+        //     cell4.innerHTML = "<input type='text'>";
+        //     cell5.innerHTML = "<input type='text'>";
+        //     //cell6.innerHTML = "<input type='text'>";
+        //    //cell7.innerHTML = "<input type='text'>";           
+        //}
+        document.getElementById("addanewstudent").addEventListener('click',popupshow);
+        function popupshow(){
+            document.getElementById('Name').value=''
+            document.getElementById('RollNumber').value=''
+            document.getElementById('Subject').value=''
+            document.getElementById('Marks').value=''
+            document.getElementById('popup').style.visibility='visible';
+            //console.log(popupshow)
+        }
+        document.getElementById("popupcloseicon").addEventListener('click',closeiconpopup);
+        function closeiconpopup(){
+            document.getElementById('popup').style.visibility='hidden';
+            //console.log(popup)
+        }
+        document.getElementById("BTN").addEventListener('click',savebutton);
+        var i=1;
+        function savebutton(){
+            var body = document.getElementById("tableBody");
+            var Name = document.getElementById('Name').value
+            var RollNumber =document.getElementById('RollNumber').value
+            var Subject =document.getElementById('Subject').value
+            var Marks =document.getElementById('Marks').value
+
+            var newRows = document.createElement('tr');
+            if(Name == ''|| RollNumber == ''|| Subject==''|| Marks==''){
+                // alert("Enter the details")
+                document.getElementById("ErrorMsg").style.display="block";
+            }
+            else{
+            newRows.innerHTML=`
+                <td>${i++}</td>
+                <td>${Name}</td>
+                <td>${RollNumber}</td>
+                <td>${Subject}</td>
+                <td>${Marks}</td>
+                <td><button id="edit" style="background-color:green;cursor:pointer"> EDIT</button></td>
+                <td><button id="delete" style="background-color:red;cursor:pointer"> Delete</button></td>
+            `;
+                //console.log(newRows)
+
+            body.appendChild(newRows);
+            //console.log(newRows)
+            document.getElementById("ErrorMsg").style.display="none";
+            document.getElementById('popup').style.visibility='hidden';
+            }
+        }
+        document.addEventListener('click',editdata);
+        var Previousnode=null;
+        function editdata(event){
+            // console.log("hi")
+            var target=event.target;
+            // console.log(target)
+            if(target.id=='edit'){
+                var node=target.parentNode.parentNode;
+                //console.log(node)
+                var cells=node.getElementsByTagName("td");
+                // console.log(cells)
+                Previousnode=cells;
+                document.getElementById("UpdateName").value=cells[1].textContent;
+                document.getElementById("UpdateRollNumber").value=cells[2].textContent;
+                document.getElementById("UpdateSubject").value=cells[3].textContent;
+                document.getElementById("UpdateMarks").value=cells[4].textContent;
+                document.getElementById("editpopup").style.visibility="visible"
+            }
+            else if(target.id=='delete'){
+                var node=target.parentNode.parentNode;
+                node.parentNode.removeChild(node);
+            }
+        }
+        document.getElementById("UpdateBTN").addEventListener('click',Updatedetails)
+        function Updatedetails(){
+            if(Previousnode){
+                var editName = document.getElementById('UpdateName').value
+                var editRollNumber =document.getElementById('UpdateRollNumber').value
+                var editSubject =document.getElementById('UpdateSubject').value
+                var editMarks =document.getElementById('Marks').value
+                if(editName == ''|| editRollNumber == ''|| editSubject==''|| editMarks==''){
+                    // alert("Enter the details")
+                    document.getElementById("ErrorMsgs").style.display="block";
+                }
+                else{
+                    Previousnode[1].textContent=document.getElementById("UpdateName").value;
+                    Previousnode[2].textContent=document.getElementById("UpdateRollNumber").value;
+                    Previousnode[3].textContent=document.getElementById("UpdateSubject").value;
+                    Previousnode[4].textContent=document.getElementById("UpdateMarks").value;
+                    document.getElementById("editpopup").style.visibility="hidden"
+                    document.getElementById("ErrorMsgs").style.display="nonegit";
+                }
+            }
+        }
+        document.getElementById("popupcloseicons").addEventListener('click',closeiconspopup);
+        function closeiconspopup(){
+            document.getElementById('editpopup').style.visibility='hidden';
+            //console.log(popup)
+        }
+        document.getElementById('deletealltables').addEventListener('click',cleardata)
+        
+        function cleardata(){
+            var clear= document.getElementById("tableBody")
+            clear.innerHTML=" "
+            i=1;
+        }
+    </script>
+</body>
+</html>
